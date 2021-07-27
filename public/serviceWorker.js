@@ -9,46 +9,46 @@ const URLs_TO_CACHE = [
 
 ];
 
-  const STATIC_CACHE = "my-site-cache-v1";
-  const RUNTIME_CACHE = "data-cache-v1";
-  
-  self.addEventListener("install", event => {
+const STATIC_CACHE = "my-site-cache-v1";
+const RUNTIME_CACHE = "data-cache-v1";
+
+self.addEventListener("install", event => {
     event.waitUntil(
-      caches
+    caches
         .open(STATIC_CACHE)
         .then(cache => cache.addAll(FILES_TO_CACHE))
         .then(() => self.skipWaiting())
     );
-  });
-  
-  
-  self.addEventListener("fetch", event => {
-    // non GET requests are not cached and requests to other origins are not cached
+});
+
+
+self.addEventListener("fetch", event => {
+    // requests to other origins are not cached
     if (
 
-      event.request.url.includes("/api/")
+    event.request.url.includes("/api/")
     ) {
         event.respondWith(
             caches.open(RUNTIME_CACHE).then(cache => {
-              return fetch(event.request)
+            return fetch(event.request)
                 .then(response => {
                     if(response.status===200){
 
                     
-                  cache.put(event.request, response.clone());
+                cache.put(event.request, response.clone());
                     }
-                  return response;
+                return response;
                 })
                 .catch(() => caches.match(event.request));
             })
-          );
+        );
     }
 
-  
-    // use cache first for all other requests for performance
+
+    // use cache 
     event.respondWith(
-  
-        // request is not in cache. make network request and cache the response
+
+        // make network request then cache the response
         
         fetch(event.request).catch(function(){
             return caches.match(event.request).then(function(res){
@@ -60,4 +60,4 @@ const URLs_TO_CACHE = [
             })
         })
     )
-  })
+})
