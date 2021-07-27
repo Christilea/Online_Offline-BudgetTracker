@@ -11,71 +11,71 @@ let transactions = [];
 let myChart;
 
 fetch("/api/transaction")
-  .then(response => {
+.then(response => {
     return response.json();
-  })
-  .then(data => {
+})
+.then(data => {
     // save db data on global variable
     transactions = data;
 
     populateTotal();
     populateTable();
     populateChart();
-  });
+});
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
-  let total = transactions.reduce((total, t) => {
+let total = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
-  }, 0);
+}, 0);
 
-  let totalEl = document.querySelector("#total");
-  totalEl.textContent = total;
+let totalEl = document.querySelector("#total");
+totalEl.textContent = total;
 }
 
 function populateTable() {
-  let tbody = document.querySelector("#tbody");
-  tbody.innerHTML = "";
+let tbody = document.querySelector("#tbody");
+tbody.innerHTML = "";
 
-  transactions.forEach(transaction => {
+transactions.forEach(transaction => {
     // create and populate a table row
     let tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${transaction.name}</td>
-      <td>${transaction.value}</td>
+    <td>${transaction.name}</td>
+    <td>${transaction.value}</td>
     `;
 
     tbody.appendChild(tr);
-  });
+});
 }
 
 function populateChart() {
   // copy array and reverse it
-  let reversed = transactions.slice().reverse();
-  let sum = 0;
+let reversed = transactions.slice().reverse();
+let sum = 0;
 
   // create date labels for chart
-  let labels = reversed.map(t => {
+let labels = reversed.map(t => {
     let date = new Date(t.date);
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-  });
+});
 
   // create incremental values for chart
-  let data = reversed.map(t => {
+]let data = reversed.map(t => {
     sum += parseInt(t.value);
     return sum;
-  });
+});
 
   // remove old chart if it exists
-  if (myChart) {
+if (myChart) {
     myChart.destroy();
-  }
+}
 
-  let ctx = document.getElementById("myChart").getContext("2d");
+let ctx = document.getElementById("myChart").getContext("2d");
 
-  myChart = new Chart(ctx, {
+myChart = new Chart(ctx, {
     type: 'line',
-      data: {
+    data: {
         labels,
         datasets: [{
             label: "Total Over Time",
@@ -84,16 +84,16 @@ function populateChart() {
             data
         }]
     }
-  });
-}
+});
+// }
 
 function sendTransaction(isAdding) {
-  let nameEl = document.querySelector("#t-name");
-  let amountEl = document.querySelector("#t-amount");
-  let errorEl = document.querySelector(".form .error");
+let nameEl = document.querySelector("#t-name");
+let amountEl = document.querySelector("#t-amount");
+let errorEl = document.querySelector(".form .error");
 
   // validate form
-  if (nameEl.value === "" || amountEl.value === "") {
+if (nameEl.value === "" || amountEl.value === "") {
     errorEl.textContent = "Missing Information";
     return;
   }
