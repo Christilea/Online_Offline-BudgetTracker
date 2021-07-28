@@ -1,6 +1,6 @@
 if("serviceWorker"in navigator){
     window.addEventListener("load",() => {
-        navigator.serviceWorker.register("/serviceWorker.js").then((register)=>{
+        navigator.serviceWorker.register("/service-worker.js").then((register)=>{
             console.log("successfully registered serviceWorker",register)
         })
 
@@ -61,7 +61,7 @@ let labels = reversed.map(t => {
 });
 
   // create incremental values for chart
-]let data = reversed.map(t => {
+let data = reversed.map(t => {
     sum += parseInt(t.value);
     return sum;
 });
@@ -85,7 +85,7 @@ myChart = new Chart(ctx, {
         }]
     }
 });
-// }
+}
 
 function sendTransaction(isAdding) {
 let nameEl = document.querySelector("#t-name");
