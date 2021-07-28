@@ -42,7 +42,7 @@ function checkDB(){
     };
 }
 
-request.onerror = function(event) {
+req.onerror = function(event) {
     console.log(event.target.errorCode);
 };
 function saveRecord(record) {
